@@ -47,7 +47,7 @@ CREATE OR REFRESH LIVE TABLE bronze_sales_raw_delta AS
 SELECT
   _c0 AS SalesOrderNumber,
   _c1 AS SalesOrderLineNumber,
-  CAST(_c2 AS DATE) AS OrderDate,
+ to_date(_c2, 'dd-MM-yyyy') AS OrderDate,
   _c3 AS CustomerId,
   _c4 AS Item,
   _c5 AS Quantity,
