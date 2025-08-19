@@ -28,7 +28,7 @@ import dlt
 from pyspark.sql.functions import col
 
 @dlt.table(
-  name="hive_metastore.sales.bronze_sales",
+  name="sales.bronze_sales",
   comment="Raw sales data ingested to Bronze layer",
   table_properties={
     "quality": "bronze"
@@ -42,13 +42,13 @@ def bronze_sales():
     )
 
 @dlt.table(
-  name="hive_metastore.sales.silver_sales",
+  name="sales.silver_sales",
   comment="Cleaned and deduplicated Silver sales data"
 )
 @dlt.expect("valid_quantity", "Quantity > 0")
 @dlt.expect_or_drop("no_nulls", "CustomerId IS NOT NULL")
 def silver_sales():
-    df = dlt.read("hive_metastore.sales.bronze_sales")
+    df = dlt.read("sales.bronze_sales")
     return df.filter(col("Quantity") > 0).dropDuplicates(["SalesOrderNumber", "SalesOrderLineNumber"])
 
 ```
@@ -73,7 +73,7 @@ SELECT
   SUM(Quantity * UnitPrice) AS total_sales,
   COUNT(DISTINCT CustomerId) AS unique_customers
 FROM
-  hive_metastore.sales.silver_sales
+  sales.silver_sales
 GROUP BY
   OrderDate
 
