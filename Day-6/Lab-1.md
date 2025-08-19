@@ -55,7 +55,7 @@ def silver_sales():
 
 ---
 
-### Notebook 2: Gold Layer (SQL)
+### Notebook 2: Gold Layer (SQL) (Set dafault Language to SQL)
 
 Create a new SQL notebook named `Medallion_Pipeline_SQL_Gold` and add:
 
