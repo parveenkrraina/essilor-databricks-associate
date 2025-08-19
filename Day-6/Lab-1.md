@@ -9,7 +9,7 @@
 
 ## Step 1: Upload Sample Data
 
-1. In Databricks, go to **Data > DBFS**.
+1. In Databricks, go to **Catalog > DBFS**.
 2. Click **Upload** and select `sales.csv`.
 3. Upload to: `/FileStore/sales.csv`.
 
