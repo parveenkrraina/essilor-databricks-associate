@@ -26,8 +26,8 @@
 
 ## Step 2: Create a New SQL Pipeline in Delta Live Tables UI
 
-1. Go to the Delta Live Tables section in your Databricks workspace.
-2. Click **Create Pipeline**.
+1. Go to the DJobs and Pipeline section in your Databricks workspace.
+2. Click **Create ETL**.
 3. Enter pipeline name, e.g., `medallion_sql_pipeline`.
 4. Select appropriate cluster configuration (default is fine).
 5. Set pipeline mode to **Batch**.
