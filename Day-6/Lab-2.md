@@ -32,6 +32,7 @@
 4. Select appropriate cluster configuration (default is fine).
 5. Set pipeline mode to **Trigger**.
 6. Save the pipeline (don’t start it yet).
+7. Schema name e.g. sales and same has to be updated in the upcoming code
 
 ---
 
