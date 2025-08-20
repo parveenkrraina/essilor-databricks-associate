@@ -26,14 +26,13 @@
 
 ## Step 2: Create a New SQL Pipeline in Delta Live Tables UI
 
-1. Go to the Delta Live Tables section in your Databricks workspace.
-2. Click **Create Pipeline**.
+1. Go to the **Jobs and Pipeline** section in your Databricks workspace.
+2. Click **Create ETL pipeline**.
 3. Enter pipeline name, e.g., `medallion_sql_pipeline`.
 4. Select appropriate cluster configuration (default is fine).
-5. Set pipeline mode to **Batch**.
-6. Specify a storage location for the pipeline (DBFS path or cloud storage).
-7. Under Pipeline settings, select **SQL** as the language.
-8. Save the pipeline (don’t start it yet).
+5. Set pipeline mode to **Trigger**.
+6. Save the pipeline (don’t start it yet).
+7. Schema name e.g. sales and same has to be updated in the next code
 
 ---
 
@@ -48,7 +47,7 @@ CREATE OR REFRESH LIVE TABLE bronze_sales_raw_delta AS
 SELECT
   _c0 AS SalesOrderNumber,
   _c1 AS SalesOrderLineNumber,
-  CAST(_c2 AS DATE) AS OrderDate,
+ to_date(_c2, 'dd-MM-yyyy') AS OrderDate,
   _c3 AS CustomerId,
   _c4 AS Item,
   _c5 AS Quantity,
