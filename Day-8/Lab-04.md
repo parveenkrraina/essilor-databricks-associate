@@ -31,7 +31,7 @@ In this module, you will learn to build, schedule, and manage robust data pipeli
 
 ### Step 1.1: Upload CSV Files to DBFS
 
-1. In Databricks, go to **Data** > **DBFS** tab.
+1. In Databricks, go to **Catalog** > **DBFS** tab.
 2. Create folder `/FileStore/lab_data/` if it doesn't exist.
 3. Upload:
     - `customer_demographics.csv`
