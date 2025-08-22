@@ -170,7 +170,7 @@ display(row_count)
 ### Step 4: Advanced Scheduling and Notifications
 
 - **Schedules:**
-  - Daily at 7 AM: `0 7 * * *`
+  - Daily at 7 AM: `0 7 * * * *`
   - Every Monday at 8 PM: `0 20 * * 1`
 - **Notifications:** Configure email for success and failure events.
 
