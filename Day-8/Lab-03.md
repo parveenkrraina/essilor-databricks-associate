@@ -227,8 +227,7 @@ Design and implement a Databricks workflow that ingests, merges, transforms, and
 
    - Use Jobs Compute for all tasks.
    - Pass outputs between tasks using parameters/JSON.
-   - Add two schedules:
-     - Daily at 6:30 AM: `30 6 * * *`
+   - Schedules:
      - Every Friday at 9 PM: `0 21 * * 5`
    - Configure notifications for job failure.
 
