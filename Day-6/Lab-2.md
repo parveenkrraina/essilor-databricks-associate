@@ -50,7 +50,6 @@ Create the pipeline script defining the Bronze, Silver, and Gold tables with exp
 
 ```sql
 -- Bronze layer: raw ingestion (ingest all raw data as-is)
--- Bronze layer: raw ingestion (ingest all raw data as-is)
 CREATE OR REFRESH MATERIALIZED VIEW bronze_sales_raw
 AS
 SELECT *
