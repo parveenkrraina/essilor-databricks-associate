@@ -16,7 +16,7 @@
 *Note: You can also upload via CLI or directly to cloud storage (Azure Blob, S3) and update paths accordingly.*
 
 ---
-## Step 1.1: Use the Hive Metastore 
+
 ## Step 2: Create Notebooks for DLT Pipeline
 
 ### Notebook 1: Bronze and Silver Layers (Python)
@@ -28,7 +28,7 @@ import dlt
 from pyspark.sql.functions import col
 
 @dlt.table(
-  name="sales.bronze_sales",
+  name="bronze_sales",
   comment="Raw sales data ingested to Bronze layer",
   table_properties={
     "quality": "bronze"
@@ -89,8 +89,9 @@ GROUP BY
      - **Name:** `MedallionArchitecturePipeline`
      - **Pipeline Mode:** Triggered (manual) or Continuous (streaming)
      - **Notebook Libraries:** Attach both notebooks above
-     - **Storage Options**  Hive Metastore
-     - **Storage Location:** e.g., `/pipelines/medallion_architecture`
+     - **Destination - Storage options**  Unity Catalog
+     - **Default Catalog:** `catalog01` -- Use this catalog for all tables as per your setup
+     - **Default Schema:** `sales` -- Use this schema for all tables as per your setup
      - **Cluster Mode**  Fixed Size
      - **Workers** 1
      - **Target Schema:** same as mentioned in the code above e.g. sales
@@ -112,12 +113,14 @@ GROUP BY
 
 ## Step 5: Query and Verify Data
 
+**Note** Change Catalog and schema as per your setup.
+
 Run in Databricks SQL notebook or editor:
 
 ```sql
-SELECT * FROM live.bronze_sales LIMIT 10;
-SELECT * FROM live.silver_sales LIMIT 10;
-SELECT * FROM live.gold_sales_summary LIMIT 10;
+SELECT * FROM catalog01.sales.bronze_sales LIMIT 10;
+SELECT * FROM catalog01.sales.silver_sales LIMIT 10;
+SELECT * FROM catalog01.sales.gold_sales_summary LIMIT 10;
 ```
 
 - Confirm raw data in Bronze, cleaned data in Silver, and aggregated metrics in Gold.
