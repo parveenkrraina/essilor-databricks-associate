@@ -49,6 +49,10 @@ SELECT * FROM spark_catalog.legacy_db.sales LIMIT 5;
 
 **Action:** Create a catalog, then a schema, then a managed table (example uses DELTA format).
 
+**Note:** You can omit the location parameter in this lab, as the catalog already has a managed location assigned.
+
+**Explanation:** This establishes a new catalog for organizing data assets and applying governance policies.
+
 ```python
 %sql
 CREATE CATALOG IF NOT EXISTS uc_demo
@@ -67,6 +71,8 @@ CREATE SCHEMA IF NOT EXISTS uc_demo.raw;
 **Why:** Bring legacy tables under Unity Catalog for unified governance and security.
 
 **Action:** List legacy tables, then use CTAS (Create Table As Select) to migrate.
+
+**Explanation:** This process involves creating new tables in the Unity Catalog and populating them with data from the legacy tables, ensuring a smooth transition to the new governance model.
 
 ```python
 %sql
@@ -108,10 +114,16 @@ display(spark.sql('SHOW TABLES IN spark_catalog.default'))
 
 **Action:** No code required here for most users; verify via Admin Console if needed.
 
+**Explanation:** This ensures that all data is encrypted and meets compliance requirements.
+
 ## 4. Apply Security Policies & Fine-Grained Access Control (Needs additional permission to access Entra that is not possible in current environment.)
 **Why:** Ensures only authorized users/groups can access or manipulate data, fulfilling compliance and privacy requirements.**
 
 **Action:** Grant usage, grant table SELECT, and build a dynamic view for row-level security.
+
+**Note:** Required Groups have been already added. Please check the permissions. Change your catalog name and schema name as per your setup.
+
+**Explanation:** This ensures that only authorized users/groups can access or manipulate data, fulfilling compliance and privacy requirements.
 
 ```python
 %sql
@@ -141,6 +153,7 @@ GRANT SELECT ON VIEW uc_demo.raw.customer_details_masked TO `account users`;
 **Why:** Automates data retention and cleanup for compliance and cost control.**
 
 **Action:** Set a Delta retention policy and use VACUUM to clean up old files.
+**Explanation:** This ensures that deleted files are retained for a specific duration, allowing for potential recovery, while also enabling the cleanup of files that are no longer needed.
 
 ```python
 %sql
@@ -156,6 +169,8 @@ VACUUM uc_demo.raw.sales RETAIN 720 HOURS;
 **Why:** Enables compliance monitoring, troubleshooting, and validation of security settings.**
 
 **Action:** Audit logs are accessed via Admin Console or your cloud provider. Validate row-level security:
+
+**Explanation:** This ensures that only authorized users can access sensitive data, fulfilling compliance and privacy requirements.
 
 ```python
 # Query as analyst (or test with different users)
