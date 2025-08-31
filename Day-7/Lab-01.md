@@ -153,6 +153,7 @@ GRANT SELECT ON VIEW uc_demo.raw.customer_details_masked TO `account users`;
 **Why:** Automates data retention and cleanup for compliance and cost control.**
 
 **Action:** Set a Delta retention policy and use VACUUM to clean up old files.
+
 **Explanation:** This ensures that deleted files are retained for a specific duration, allowing for potential recovery, while also enabling the cleanup of files that are no longer needed.
 
 ```python
