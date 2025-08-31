@@ -72,4 +72,23 @@ def silver_sales():
 - **Table properties**:
   - `"quality"`: Assigns the data quality tier (`bronze` or `silver`).
   - `"pipelines.autoOptimize.managed"`: Enables Delta Lake auto-optimization.
+- **Auto-Optimization**: Automatically optimizes query performance and resource usage.
 - **CSV reading**: Loads data from the uploaded CSV file.
+- **Transformations**: Basic filtering is applied to clean the data.
+- **Data quality checks**: Expectations are set to ensure data quality.
+- **Materialization**: The final output is stored as a Delta table.
+- **Streaming**: Support for streaming data ingestion and processing.
+- **Performance**: Optimized for high throughput and low latency.
+- **Scalability**: Designed to handle large volumes of data efficiently.
+- **Simplicity**: Simplifies the development of data pipelines with declarative syntax.
+- **Extensibility**: Easily integrates with other data processing tools and frameworks.
+- **Maintainability**: Facilitates easier updates and changes to data pipelines.
+- **Observability**: Provides built-in monitoring and logging for data pipelines.
+- **Security**: Ensures data access controls and compliance requirements are met.
+- **Collaboration**: Supports teamwork and collaboration among data engineers and analysts.
+- **Documentation**: Encourages clear documentation of data pipelines and transformations.
+- **Testing**: Simplifies the process of testing and validating data transformations.
+- **Versioning**: Supports version control for data pipelines and their components.
+- **Reproducibility**: Ensures that data pipelines can be easily reproduced and audited.
+- **Modularity**: Encourages the development of modular and reusable pipeline components.
+- **Configurability**: Allows for easy configuration and customization of pipeline behavior.
