@@ -32,13 +32,21 @@
 4. Select appropriate cluster configuration (default is fine).
 5. Set pipeline mode to **Trigger**.
 6. Save the pipeline (don’t start it yet).
-7. Schema name e.g. sales and same has to be updated in the next code
+7. Set Destination Storage to Unity Catalog
+8. Default Catalog: catalog01 -- Use this catalog for all tables as per your setup
+9. Default Schema: sales -- Use this schema for all tables as per your setup
+10. Cluster Mode Fixed Size
+11. Workers 1
+12. Target Schema: same as mentioned in the code above e.g. sales
+13. Instance types Standard_DS3_v2 (Recommended for balanced performance and cost for typical ETL workloads)
+14. Set Driver Type to Standard_DS3_v2 (same as worker node instance type)
+15. From the source Code under the Pipeline details click on the Source code link.
 
 ---
 
 ## Step 3: Write SQL Pipeline Script
 
-Create the pipeline script defining the Bronze, Silver, and Gold tables with expectations.
+Create the pipeline script defining the Bronze, Silver, and Gold tables with expectations. Change the default language to SQL.
 
 ```sql
 -- Bronze layer: raw ingestion (ingest all raw data as-is)
@@ -110,7 +118,7 @@ GROUP BY CustomerId, DATE_TRUNC('month', OrderDate);
 ---
 
 ## Step 4: Start and Run the Pipeline
-
+- Navigate back to your pipeline created in the earlier steps.
 - Click **Start** to run the pipeline.
 - Monitor pipeline progress in the UI dashboard.
 - Wait until the pipeline run completes successfully.
@@ -133,11 +141,11 @@ In a Databricks notebook or SQL editor, run queries to validate output:
 
 ```sql
 -- Bronze raw data
-SELECT * FROM uc01.sales.bronze_sales_raw LIMIT 10;
+SELECT * FROM catalog01.sales.bronze_sales_raw LIMIT 10;
 
 -- Silver cleaned data
-SELECT * FROM uc01.sales.silver_sales_cleaned LIMIT 10;
+SELECT * FROM catalog01.sales.silver_sales_cleaned LIMIT 10;
 
 -- Gold aggregated data
-SELECT * FROM uc01.sales.gold_sales_aggregated ORDER BY order_date DESC LIMIT 10;
+SELECT * FROM catalog01.sales.gold_sales_aggregated ORDER BY order_date DESC LIMIT 10;
 ```
