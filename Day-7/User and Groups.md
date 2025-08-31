@@ -68,13 +68,15 @@ You will:
 
 Open Databricks SQL Editor or a notebook (as admin or metastore admin) and run:
 
+**Note** Change catalog and schema names and table names as per your setup.
+
 ```sql
 -- Grant catalog and schema usage
-GRANT USAGE ON CATALOG sales_data_managed TO `data_analysts`;
-GRANT USAGE ON SCHEMA sales_data_managed.raw TO `data_analysts`;
+GRANT USAGE ON CATALOG uc_demo TO `data_analysts`;
+GRANT USAGE ON SCHEMA uc_demo.raw TO `data_analysts`;
 
 -- Grant SELECT on a table
-GRANT SELECT ON TABLE sales_data_managed.raw.orders_v2 TO `data_analysts`;
+GRANT SELECT ON TABLE uc_demo.raw.orders_v2 TO `data_analysts`;
 ```
 
 ---
