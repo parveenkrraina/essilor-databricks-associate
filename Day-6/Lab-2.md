@@ -50,57 +50,51 @@ Create the pipeline script defining the Bronze, Silver, and Gold tables with exp
 
 ```sql
 -- Bronze layer: raw ingestion (ingest all raw data as-is)
--- Load the CSV file into a Delta table with correct column names
-CREATE OR REFRESH LIVE TABLE bronze_sales_raw_delta AS
-SELECT
-  _c0 AS SalesOrderNumber,
-  _c1 AS SalesOrderLineNumber,
- to_date(_c2, 'dd-MM-yyyy') AS OrderDate,
-  _c3 AS CustomerId,
-  _c4 AS Item,
-  _c5 AS Quantity,
-  _c6 AS UnitPrice,
-  _c7 AS TaxAmount
-FROM csv.`/FileStore/DLT/sales.csv`;
-
--- Create the live table from the Delta table
-CREATE OR REFRESH LIVE TABLE bronze_sales_raw AS
+-- Bronze layer: raw ingestion (ingest all raw data as-is)
+CREATE OR REFRESH MATERIALIZED VIEW bronze_sales_raw
+AS
 SELECT *
-FROM live.bronze_sales_raw_delta;
+FROM read_files(
+  "/FileStore/DLT/sales.csv",
+  format => "csv",
+  header => "true",
+  inferSchema => "true"
+);
 
 -- Silver layer: clean and deduplicate, add data quality expectations
-CREATE OR REFRESH LIVE TABLE silver_sales_cleaned (
-  SalesOrderNumber STRING NOT NULL,
-  SalesOrderLineNumber STRING,
-  OrderDate DATE NOT NULL,
+CREATE OR REFRESH MATERIALIZED VIEW silver_sales_cleaned (
+  SalesOrderNumber STRING,
+  SalesOrderLineNumber INT, 
+  OrderDate DATE,
   CustomerId STRING,
   Item STRING,
   Quantity INT,
   UnitPrice DOUBLE,
   TaxAmount DOUBLE,
-  CONSTRAINT order_id_not_null EXPECT (SalesOrderNumber IS NOT NULL),
-  CONSTRAINT order_date_not_null EXPECT (OrderDate IS NOT NULL),
-  CONSTRAINT quantity_valid EXPECT (Quantity BETWEEN 1 AND 100),
-  CONSTRAINT price_positive EXPECT (UnitPrice > 0),
-  CONSTRAINT tax_non_negative EXPECT (TaxAmount >= 0),
-  CONSTRAINT order_date_valid EXPECT (OrderDate <= CURRENT_DATE())
+  
+  -- Data quality expectations with violation handling
+  CONSTRAINT order_id_not_null EXPECT (SalesOrderNumber IS NOT NULL) ON VIOLATION DROP ROW,
+  CONSTRAINT order_date_not_null EXPECT (OrderDate IS NOT NULL) ON VIOLATION DROP ROW,
+  CONSTRAINT quantity_valid EXPECT (Quantity BETWEEN 1 AND 100) ON VIOLATION DROP ROW,
+  CONSTRAINT price_positive EXPECT (UnitPrice > 0) ON VIOLATION DROP ROW,
+  CONSTRAINT tax_non_negative EXPECT (TaxAmount >= 0) ON VIOLATION DROP ROW,
+  CONSTRAINT order_date_valid EXPECT (OrderDate <= CURRENT_DATE()) ON VIOLATION DROP ROW
 )
 AS
 SELECT
   SalesOrderNumber,
-  SalesOrderLineNumber,
-  OrderDate,
+  CAST(SalesOrderLineNumber AS INT) AS SalesOrderLineNumber,  -- Explicit cast to ensure type match
+  to_date(OrderDate, 'dd-MM-yyyy') AS OrderDate,  -- Adjust format if dates differ
   CustomerId,
   Item,
   CAST(Quantity AS INT) AS Quantity,
   CAST(UnitPrice AS DOUBLE) AS UnitPrice,
   CAST(TaxAmount AS DOUBLE) AS TaxAmount
-FROM live.bronze_sales_raw
-WHERE SalesOrderNumber IS NOT NULL
-  AND OrderDate IS NOT NULL;
+FROM LIVE.bronze_sales_raw;
 
 -- Gold layer: aggregated sales data for reporting
-CREATE OR REFRESH LIVE TABLE gold_sales_aggregated AS
+CREATE OR REFRESH MATERIALIZED VIEW gold_sales_aggregated
+AS
 SELECT
   CustomerId,
   DATE_TRUNC('month', OrderDate) AS SalesMonth,
@@ -108,8 +102,9 @@ SELECT
   SUM(Quantity) AS TotalQuantity,
   SUM(Quantity * UnitPrice) AS TotalSales,
   SUM(TaxAmount) AS TotalTax
-FROM live.silver_sales_cleaned
+FROM LIVE.silver_sales_cleaned
 GROUP BY CustomerId, DATE_TRUNC('month', OrderDate);
+
 ```
 
 - Paste this SQL script into the pipeline editor in the UI.
