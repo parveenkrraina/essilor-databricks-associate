@@ -175,7 +175,7 @@ VACUUM uc_demo.raw.sales RETAIN 720 HOURS;
 
 ```python
 # Query as analyst (or test with different users)
-display(spark.sql('SELECT * FROM sales_data_managed.raw.secure_orders'))
+display(spark.sql('SELECT * FROM uc_demo.raw.sales LIMIT 5'))
 ```
 
 ## 7. Clean Up (Optional)
