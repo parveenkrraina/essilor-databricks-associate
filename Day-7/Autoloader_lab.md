@@ -30,7 +30,7 @@ We'll demonstrate how to use Autoloader to ingest the following files:
 - `product_catalog.csv`
 - `sales.csv`
 
-Assume these files arrive incrementally in a folder such as `/FileStore/data/input/`.
+Assume these files arrive incrementally in a folder such as `/FileStore/data/`.
 
 ## Step-by-Step Example: Using Autoloader
 
@@ -103,6 +103,7 @@ sales_df = (
     .option("header", True)
     .option("cloudFiles.schemaLocation", "/mnt/schema/sales")
     .load(input_path)
+)
 ```
 
 ## 4. Hands-On Exercise
